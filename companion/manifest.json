@@ -1,0 +1,36 @@
+{
+	"$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
+	"type": "connection",
+	"id": "rustedroof-keypoint-osc",
+	"name": "KeyPoint OSC",
+	"shortname": "keypoint",
+	"description": "Control PowerPoint for Mac and Keynote slide shows through the KeyPoint OSC menu-bar app",
+	"version": "0.0.0",
+	"license": "MIT",
+	"repository": "git+https://github.com/BasilChessman/companion-module-rustedroof-keypoint-osc.git",
+	"bugs": "https://github.com/BasilChessman/companion-module-rustedroof-keypoint-osc/issues",
+	"maintainers": [
+		{
+			"name": "BasilChessman"
+		}
+	],
+	"runtime": {
+		"type": "node26",
+		"api": "nodejs-ipc",
+		"apiVersion": "0.0.0",
+		"entrypoint": "../src/main.js"
+	},
+	"legacyIds": [],
+	"manufacturer": "RustedRoof",
+	"products": [
+		"KeyPoint OSC"
+	],
+	"keywords": [
+		"PowerPoint",
+		"Keynote",
+		"Presentation",
+		"Slides",
+		"Mac",
+		"OSC"
+	]
+}
