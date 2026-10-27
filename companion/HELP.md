@@ -5,11 +5,18 @@ Controls **PowerPoint for Mac** and **Keynote** slide shows through the KeyPoint
 ### Setup
 
 1. On the Mac, open KeyPoint OSC (0.1 or later) and note the IP shown in its menu as **This Mac**.
-2. Here, enter that IP as **Mac IP address**. Leave the port at **35551** unless you changed it in KeyPoint.
+2. Here, enter:
+   - **Mac IP address**: that IP.
+   - **Send port**: KeyPoint's listen port, **35551** unless you changed it in the KeyPoint menu.
+   - **Receive port**: the UDP port on this Companion computer that KeyPoint replies to. Give every KeyPoint connection its own port (for example 35560, 35561, …); 0 picks any free port. Allow it in this computer's firewall if replies don't arrive.
 
-No feedback settings are needed. KeyPoint answers this connection directly, and its "Feedback to" settings only apply to other OSC clients, such as the Zinc: OSCPoint module, which can keep running alongside this one.
+No feedback settings are needed in KeyPoint: it replies to whichever port each connection sends from. Its "Feedback to" settings only apply to other OSC clients, such as the Zinc: OSCPoint module, which can keep running alongside this one.
 
-The connection shows **OK** once KeyPoint answers. It checks every few seconds and shows an error if KeyPoint stops answering (Mac asleep, app quit, firewall). If it stays on "Waiting", check that the Mac's firewall allows incoming connections for KeyPoint OSC.
+The connection shows **OK** once KeyPoint answers. It checks every few seconds and shows an error if KeyPoint stops answering (Mac asleep, app quit, firewall), or if the receive port is already used by another connection.
+
+### Several Macs
+
+Add one KeyPoint OSC connection per Mac, each with that Mac's IP and its own receive port. Variables and feedbacks are per connection, e.g. `$(keypoint_a:current_slide)` and `$(keypoint_b:current_slide)`.
 
 KeyPoint picks the app automatically: the one with a slide show running, otherwise the one used most recently. Use the **Select app** action to fix the choice.
 

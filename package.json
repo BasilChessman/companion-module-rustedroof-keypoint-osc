@@ -1,6 +1,6 @@
 {
 	"name": "companion-module-rustedroof-keypoint-osc",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Bitfocus Companion module for KeyPoint OSC (PowerPoint for Mac and Keynote)",
 	"type": "module",
 	"main": "src/main.js",

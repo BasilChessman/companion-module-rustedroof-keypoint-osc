@@ -59,7 +59,8 @@ export default class KeyPointInstance extends InstanceBase {
 				label: 'KeyPoint OSC',
 				value:
 					'Controls PowerPoint for Mac and Keynote through the KeyPoint OSC menu-bar app (version 0.1 or later). ' +
-					'KeyPoint answers this connection directly, so no feedback settings are needed in the KeyPoint menu.',
+					'KeyPoint replies to the receive port below, so no feedback settings are needed in the KeyPoint menu. ' +
+					'Give each KeyPoint connection its own receive port.',
 			},
 			{
 				type: 'textinput',
@@ -72,11 +73,24 @@ export default class KeyPointInstance extends InstanceBase {
 			{
 				type: 'number',
 				id: 'port',
-				label: 'KeyPoint listen port',
+				label: 'Send port',
 				width: 4,
 				default: 35551,
 				min: 1024,
 				max: 65535,
+				tooltip: 'KeyPoint\'s listen port on the Mac (35551 unless changed in the KeyPoint menu)',
+			},
+			{
+				type: 'number',
+				id: 'receivePort',
+				label: 'Receive port',
+				width: 4,
+				default: 0,
+				min: 0,
+				max: 65535,
+				tooltip:
+					'UDP port on this computer for replies from KeyPoint. Use a different port for each KeyPoint connection. ' +
+					'0 picks any free port.',
 			},
 		]
 	}
@@ -93,18 +107,32 @@ export default class KeyPointInstance extends InstanceBase {
 		const socket = dgram.createSocket({ type: 'udp4' })
 		this.socket = socket
 		socket.on('error', (err) => {
-			this.log('error', `UDP: ${err.message}`)
-			this.updateStatus(InstanceStatus.ConnectionFailure, err.message)
+			const message =
+				err.code === 'EADDRINUSE'
+					? `Receive port ${this.receivePort} is already in use (another connection or app). Choose a different receive port.`
+					: err.code === 'EACCES'
+						? `Not allowed to use receive port ${this.receivePort}. Choose a port above 1023.`
+						: err.message
+			this.log('error', `UDP: ${message}`)
+			this.updateStatus(InstanceStatus.ConnectionFailure, message)
+			this.stop()
 		})
 		socket.on('message', (buf, rinfo) => this.receive(buf, rinfo))
 		socket.on('listening', () => {
 			// KeyPoint replies to /keypoint controllers at the address and port they send
-			// from, so one socket on any free port both sends and receives.
+			// from, so this one socket both sends and receives.
+			this.log('info', `Receiving on UDP port ${socket.address().port}`)
 			this.sendRaw(`${PREFIX}/ping`)
 			this.sendRaw(`${PREFIX}/feedbacks/refresh`)
 			this.pingTimer = setInterval(() => this.tick(), PING_INTERVAL_MS)
 		})
-		socket.bind(0)
+		socket.bind(this.receivePort)
+	}
+
+	/** Local port for replies; 0 = any free port. */
+	get receivePort() {
+		const port = Number(this.config.receivePort)
+		return Number.isInteger(port) && port >= 0 && port <= 65535 ? port : 0
 	}
 
 	stop() {
