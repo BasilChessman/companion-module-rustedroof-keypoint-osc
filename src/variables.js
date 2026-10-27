@@ -1,4 +1,4 @@
-const VARIABLES = {
+export const VARIABLES = {
 	connected: 'Connected to KeyPoint (true/false)',
 	version: 'KeyPoint OSC version',
 	app: 'App in use (powerpoint, keynote, none)',
@@ -26,10 +26,9 @@ const VARIABLES = {
 	last_event: 'Last event from KeyPoint (e.g. slideshow_begin)',
 }
 
-module.exports = function (self) {
+export default function UpdateVariableDefinitions(self) {
 	const definitions = {}
 	for (const [id, name] of Object.entries(VARIABLES)) definitions[id] = { name }
 	self.setVariableDefinitions(definitions)
 }
 
-module.exports.VARIABLES = VARIABLES

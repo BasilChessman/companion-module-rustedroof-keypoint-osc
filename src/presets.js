@@ -33,7 +33,7 @@ const unsupported = (capability) => ({
 	style: { bgcolor: GREY, color: 0x808080 },
 })
 
-module.exports = function (self) {
+export default function UpdatePresets(self) {
 	const v = (name) => `$(${self.label}:${name})`
 	const inShow = { feedbackId: 'show_state', options: { state: 'in_show' }, style: { bgcolor: GREEN, color: WHITE } }
 

@@ -1,6 +1,6 @@
 // Feedback state: applies incoming /keypoint/... messages and exposes Companion
 // variable values. Free of Companion APIs so it can be unit-tested.
-const { messageText } = require('./osc')
+import { messageText } from './osc.js'
 
 const PREFIX = '/keypoint/'
 
@@ -222,4 +222,4 @@ function argsText(arg) {
 	return arg && arg.type === 's' ? arg.value : undefined
 }
 
-module.exports = { KeyPointState, formatTime }
+export { KeyPointState, formatTime }

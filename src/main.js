@@ -1,19 +1,23 @@
-const dgram = require('node:dgram')
-const { InstanceBase, InstanceStatus, Regex, runEntrypoint } = require('@companion-module/base')
-const { encodeMessage, decodePacket } = require('./osc')
-const { KeyPointState } = require('./state')
-const { PREFIX } = require('./commands')
-const UpgradeScripts = require('./upgrades')
-const UpdateActions = require('./actions')
-const UpdateFeedbacks = require('./feedbacks')
-const UpdateVariableDefinitions = require('./variables')
-const UpdatePresets = require('./presets')
+import dgram from 'node:dgram'
+import { InstanceBase, InstanceStatus, Regex } from '@companion-module/base'
+import { encodeMessage, decodePacket } from './osc.js'
+import { KeyPointState } from './state.js'
+import { PREFIX } from './commands.js'
+import { UpgradeScripts } from './upgrades.js'
+import UpdateActions from './actions.js'
+import UpdateFeedbacks from './feedbacks.js'
+import UpdateVariableDefinitions from './variables.js'
+import UpdatePresets from './presets.js'
+
+// Companion (module API 2.x) imports this file and uses the default export as the
+// instance class and the named UpgradeScripts export.
+export { UpgradeScripts }
 
 const PING_INTERVAL_MS = 3000
 // No reply for this long means KeyPoint is unreachable (or not running).
 const TIMEOUT_MS = 8000
 
-class KeyPointInstance extends InstanceBase {
+export default class KeyPointInstance extends InstanceBase {
 	constructor(internal) {
 		super(internal)
 		this.state = new KeyPointState()
@@ -201,4 +205,3 @@ class KeyPointInstance extends InstanceBase {
 	}
 }
 
-runEntrypoint(KeyPointInstance, UpgradeScripts)

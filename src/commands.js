@@ -1,6 +1,6 @@
 // Action table: options shown in Companion, and the OSC message each action sends.
 // Kept free of Companion APIs so it can be unit-tested.
-const { textArg } = require('./osc')
+import { textArg } from './osc.js'
 
 const PREFIX = '/keypoint'
 
@@ -235,4 +235,4 @@ const COMMANDS = {
 	refresh: { name: 'KeyPoint: refresh feedback', options: [], build: () => msg('feedbacks/refresh') },
 }
 
-module.exports = { COMMANDS, PREFIX }
+export { COMMANDS, PREFIX }

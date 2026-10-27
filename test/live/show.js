@@ -1,5 +1,5 @@
 // Drives a PowerPoint show through the module's actions and prints what the module sees.
-module.exports = async (h) => {
+export default async (h) => {
 	const v = h.vars
 	const show = (label) =>
 		console.log(

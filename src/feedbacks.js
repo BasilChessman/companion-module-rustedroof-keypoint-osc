@@ -4,7 +4,7 @@ const AMBER = 0xd08000
 const WHITE = 0xffffff
 const BLACK = 0x000000
 
-const CAPABILITIES = [
+export const CAPABILITIES = [
 	{ id: 'navigate', label: 'Next / previous' },
 	{ id: 'gotoSlide', label: 'Go to slide' },
 	{ id: 'sections', label: 'Sections' },
@@ -21,7 +21,7 @@ const CAPABILITIES = [
 	{ id: 'activatePresentation', label: 'Switch presentation' },
 ]
 
-module.exports = function (self) {
+export default function UpdateFeedbacks(self) {
 	const v = () => self.state.values
 	self.setFeedbackDefinitions({
 		connected: {
@@ -161,4 +161,3 @@ module.exports = function (self) {
 	})
 }
 
-module.exports.CAPABILITIES = CAPABILITIES

@@ -1,9 +1,9 @@
-const { test } = require('node:test')
-const assert = require('node:assert/strict')
-const { encodeMessage, decodePacket, messageText, textArg } = require('../src/osc')
-const { COMMANDS } = require('../src/commands')
-const { KeyPointState, formatTime } = require('../src/state')
-const { VARIABLES } = require('../src/variables')
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { encodeMessage, decodePacket, messageText, textArg } from '../src/osc.js'
+import { COMMANDS } from '../src/commands.js'
+import { KeyPointState, formatTime } from '../src/state.js'
+import { VARIABLES } from '../src/variables.js'
 
 const s = (value) => ({ type: 's', value })
 const i = (value) => ({ type: 'i', value })

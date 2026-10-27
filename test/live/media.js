@@ -1,5 +1,5 @@
 // Prints media state at short intervals after play/pause/stop, to see feedback lag.
-module.exports = async (h) => {
+export default async (h) => {
 	await h.wait(1500)
 	await h.press('select_app', { app: 'powerpoint' })
 	await h.press('start', { slide: 4 })

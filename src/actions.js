@@ -1,6 +1,6 @@
-const { COMMANDS } = require('./commands')
+import { COMMANDS } from './commands.js'
 
-module.exports = function (self) {
+export default function UpdateActions(self) {
 	const definitions = {}
 	for (const [id, command] of Object.entries(COMMANDS)) {
 		definitions[id] = {

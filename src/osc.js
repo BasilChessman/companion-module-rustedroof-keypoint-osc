@@ -170,4 +170,4 @@ function textArg(str) {
 	return /^[\x00-\x7f]*$/.test(str) ? { type: 's', value: str } : { type: 'b', value: Buffer.from(str, 'utf8') }
 }
 
-module.exports = { encodeMessage, decodePacket, argText, messageText, textArg }
+export { encodeMessage, decodePacket, argText, messageText, textArg }
