@@ -17,8 +17,16 @@ const SHOW_KEYS = [
 	'section_slides_remaining',
 	'media_state',
 	'media_position',
+	'media_position_display',
+	'media_duration',
+	'media_duration_display',
+	'media_remaining',
+	'media_remaining_display',
 	'overlay',
 ]
+
+// Cleared when the slide has no media (KeyPoint sends an empty media state).
+const MEDIA_KEYS = SHOW_KEYS.filter((k) => k.startsWith('media_'))
 
 function emptyValues() {
 	return {
@@ -39,6 +47,10 @@ function emptyValues() {
 		media_state: '',
 		media_position: '',
 		media_position_display: '',
+		media_duration: '',
+		media_duration_display: '',
+		media_remaining: '',
+		media_remaining_display: '',
 		overlay: 'none',
 		presentations: '',
 		files: '',
@@ -49,10 +61,11 @@ function emptyValues() {
 	}
 }
 
-/** Formats milliseconds as m:ss. */
-function formatTime(ms) {
+/** Formats milliseconds as m:ss, rounding down (or up, for a countdown that reaches 0:00 at the end). */
+function formatTime(ms, roundUp = false) {
 	if (ms === '' || ms === undefined || ms === null || Number.isNaN(Number(ms))) return ''
-	const total = Math.max(0, Math.floor(Number(ms) / 1000))
+	const seconds = Number(ms) / 1000
+	const total = Math.max(0, roundUp ? Math.ceil(seconds) : Math.floor(seconds))
 	return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
 }
 
@@ -181,7 +194,21 @@ class KeyPointState {
 				break
 			case 'slideshow/media/state':
 				v.media_state = text ?? ''
+				if (v.media_state === '') this.clearMedia()
 				break
+			case 'slideshow/media/durationtrimmed':
+				// The playable length (after trimming); position counts from the trimmed start.
+				v.media_duration = num ?? ''
+				v.media_duration_display = formatTime(num, true)
+				break
+			case 'slideshow/media/remaining':
+				v.media_remaining = num ?? ''
+				v.media_remaining_display = formatTime(num, true)
+				break
+			case 'slideshow/media/duration':
+			case 'slideshow/media/startpoint':
+			case 'slideshow/media/endpoint':
+				break // untrimmed file values; not needed for the variables
 			case 'slideshow/media/position':
 				v.media_position = num ?? ''
 				v.media_position_display = formatTime(num)
@@ -197,7 +224,10 @@ class KeyPointState {
 	clearShow() {
 		const blank = emptyValues()
 		for (const k of SHOW_KEYS) this.values[k] = blank[k]
-		this.values.media_position_display = ''
+	}
+
+	clearMedia() {
+		for (const k of MEDIA_KEYS) this.values[k] = ''
 	}
 
 	get inShow() {

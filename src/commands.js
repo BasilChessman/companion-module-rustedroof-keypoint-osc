@@ -136,11 +136,18 @@ const COMMANDS = {
 					{ id: 'forward', label: 'Forward by' },
 					{ id: 'back', label: 'Back by' },
 					{ id: 'fromstart', label: 'To position from start' },
+					{ id: 'beforeend', label: 'To position before end' },
 				],
 			},
 			{ id: 'ms', type: 'number', label: 'Milliseconds', default: 10000, min: 0, max: 86400000, asInteger: true },
 		],
-		build: (o) => msg(`media/goto/position/${['back', 'fromstart'].includes(o.mode) ? o.mode : 'forward'}`, [int(o.ms)]),
+		build: (o) =>
+			msg(`media/goto/position/${['back', 'fromstart', 'beforeend'].includes(o.mode) ? o.mode : 'forward'}`, [int(o.ms)]),
+	},
+	media_seek_percent: {
+		name: 'Media: seek to percent (PowerPoint)',
+		options: [{ id: 'percent', type: 'number', label: 'Percent', default: 50, min: 0, max: 100, step: 1 }],
+		build: (o) => msg('media/goto/position/percent', [{ type: 'f', value: Math.min(Math.max(Number(o.percent) || 0, 0), 100) }]),
 	},
 	media_bookmark: {
 		name: 'Media: next / previous bookmark (PowerPoint)',

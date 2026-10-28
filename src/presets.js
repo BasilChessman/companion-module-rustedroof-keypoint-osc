@@ -89,6 +89,17 @@ export default function UpdatePresets(self) {
 			feedbacks: [unsupported('media')],
 		}),
 		media_time: display('Media position', `MEDIA\\n${v('media_position_display')}`, { size: '18' }),
+		media_countdown: display('Media time remaining', `LEFT\\n${v('media_remaining_display')}`, {
+			size: '18',
+			feedbacks: [
+				{ feedbackId: 'media_ending', options: { seconds: 30, playing: true }, style: { bgcolor: 0xd08000, color: BLACK } },
+				{ feedbackId: 'media_ending', options: { seconds: 10, playing: true }, style: { bgcolor: RED, color: WHITE } },
+			],
+		}),
+		media_last10: button('Media: last 10 s', 'LAST\\n10s', 'media_seek', { mode: 'beforeend', ms: 10000 }, {
+			size: '14',
+			feedbacks: [unsupported('mediaDuration')],
+		}),
 		app_auto: button('App: automatic', 'APP\\nAUTO', 'select_app', { app: 'auto' }, { size: '14' }),
 		app_powerpoint: button('App: PowerPoint', 'APP\\nPPT', 'select_app', { app: 'powerpoint' }, {
 			size: '14',
@@ -111,7 +122,7 @@ export default function UpdatePresets(self) {
 		{
 			id: 'media',
 			name: 'Media (PowerPoint)',
-			definitions: ['media_playpause', 'media_stop', 'media_back', 'media_forward', 'media_time'],
+			definitions: ['media_playpause', 'media_stop', 'media_back', 'media_forward', 'media_time', 'media_countdown', 'media_last10'],
 		},
 		{ id: 'app', name: 'App selection', definitions: ['app_auto', 'app_powerpoint', 'app_keynote'] },
 	]

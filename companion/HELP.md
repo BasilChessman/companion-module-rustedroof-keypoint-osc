@@ -29,6 +29,7 @@ KeyPoint picks the app automatically: the one with a slide show running, otherwi
 | Black / white screen | ✅ | ✅ |
 | Pause / resume auto-advance | ✅ | — |
 | Media play / pause / stop / seek | ✅ | — |
+| Media length and time remaining | ✅ from the saved file | — |
 | Build count and builds remaining | ✅ | — |
 | Notes, slide counts, slides remaining | ✅ | ✅ |
 
@@ -42,8 +43,12 @@ Notes:
 
 ### Variables
 
-`$(keypoint:current_slide)`, `slide_count`, `slides_remaining`, `presentation_name`, `notes`, `section_name`, `build_position`, `build_count`, `media_position_display`, `app`, `show_state`, `overlay`, `connected` and more. Replace `keypoint` with your connection's label. The full list is under Variables for this connection.
+`$(keypoint:current_slide)`, `slide_count`, `slides_remaining`, `presentation_name`, `notes`, `section_name`, `build_position`, `build_count`, `media_position_display`, `media_remaining_display`, `media_duration_display`, `app`, `show_state`, `overlay`, `connected` and more. Replace `keypoint` with your connection's label. The full list is under Variables for this connection.
 
 ### Presets
 
-Ready-made buttons for navigation, show control, black/white, info displays (slide counter, builds, notes, section), media and app selection.
+Ready-made buttons for navigation, show control, black/white, info displays (slide counter, builds, notes, section), media (including a countdown that turns amber at 30 s and red at 10 s) and app selection.
+
+## Media countdown (PowerPoint)
+
+PowerPoint doesn't report a video's length, so KeyPoint reads it from the saved presentation file. Trims made in PowerPoint are taken into account. Save the deck after adding or trimming a video; changes that aren't saved yet aren't seen. Online videos have no length. Use the **Media ending soon** feedback to colour a button when a set number of seconds is left.

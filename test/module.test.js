@@ -76,6 +76,11 @@ test('commands: specific messages', () => {
 	assert.deepEqual(COMMANDS.white.build({ mode: 'off' }).args, [i(0)])
 	assert.deepEqual(COMMANDS.goto_section.build({ section: 'Médias' }).args, [b('Médias')])
 	assert.equal(COMMANDS.media_seek.build({ mode: 'back', ms: 5000 }).address, '/keypoint/media/goto/position/back')
+	assert.deepEqual(COMMANDS.media_seek.build({ mode: 'beforeend', ms: 10000 }), {
+		address: '/keypoint/media/goto/position/beforeend',
+		args: [i(10000)],
+	})
+	assert.deepEqual(COMMANDS.media_seek_percent.build({ percent: 150 }).args, [{ type: 'f', value: 100 }])
 	assert.equal(COMMANDS.files_close.build({ name: '', mode: 'force' }).address, '/keypoint/files/close/force')
 	assert.deepEqual(COMMANDS.files_close.build({ name: '', mode: 'abort' }).args, [])
 	assert.deepEqual(COMMANDS.select_app.build({ app: 'keynote' }), { address: '/keypoint/app/select', args: [s('keynote')] })
@@ -105,6 +110,28 @@ test('state: show feedback becomes variables', () => {
 	assert.equal(st.values.presentation_name, 'Déck.pptx')
 })
 
+test('state: media length and countdown', () => {
+	const st = new KeyPointState()
+	st.apply('/keypoint/slideshow/state', [s('running')])
+	st.apply('/keypoint/slideshow/media/state', [s('playing')])
+	st.apply('/keypoint/slideshow/media/position', [i(4000)])
+	st.apply('/keypoint/slideshow/media/duration', [i(59078)])
+	const changed = st.apply('/keypoint/slideshow/media/durationtrimmed', [i(29078)])
+	assert.deepEqual(changed, ['media_duration', 'media_duration_display'])
+	st.apply('/keypoint/slideshow/media/remaining', [i(25078)])
+	assert.equal(st.values.media_duration_display, '0:30') // rounded up, like the countdown
+	assert.equal(st.values.media_remaining, 25078)
+	assert.equal(st.values.media_remaining_display, '0:26') // counts down to 0:00 at the end
+	// Length not known: cleared.
+	st.apply('/keypoint/slideshow/media/remaining', [s('')])
+	assert.equal(st.values.media_remaining_display, '')
+	// A slide without media clears everything media.
+	st.apply('/keypoint/slideshow/media/remaining', [i(1000)])
+	st.apply('/keypoint/slideshow/media/state', [s('')])
+	for (const k of ['media_state', 'media_position', 'media_position_display', 'media_duration', 'media_remaining_display'])
+		assert.equal(st.values[k], '', k)
+})
+
 test('state: JSON lists, capabilities and foreign prefixes', () => {
 	const st = new KeyPointState()
 	st.apply('/keypoint/v2/presentations', [s('[{"name":"A.pptx"},{"name":"B\\u00e9.key"}]')])
@@ -130,4 +157,6 @@ test('formatTime', () => {
 	assert.equal(formatTime(0), '0:00')
 	assert.equal(formatTime(61999), '1:01')
 	assert.equal(formatTime(''), '')
+	assert.equal(formatTime(1, true), '0:01')
+	assert.equal(formatTime(60000, true), '1:00')
 })

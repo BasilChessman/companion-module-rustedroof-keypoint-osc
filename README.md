@@ -17,7 +17,7 @@ node test/live/harness.js <mac-ip> test/live/smoke.js   # runs the module agains
 node test/live/multi.js <mac-ip>                        # two connections with their own receive ports, plus a port conflict
 ```
 
-`test/live/harness.js` loads `src/main.js` with the real SDK and a stand-in for Companion's connection context, so the module's actions, feedbacks and variables can be exercised against the real app without Companion. `show.js` and `media.js` drive a PowerPoint show.
+`test/live/harness.js` loads `src/main.js` with the real SDK and a stand-in for Companion's connection context, so the module's actions, feedbacks and variables can be exercised against the real app without Companion. `show.js`, `media.js` and `countdown.js` drive a PowerPoint show.
 
 ## License
 

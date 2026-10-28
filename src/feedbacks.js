@@ -14,6 +14,7 @@ export const CAPABILITIES = [
 	{ id: 'blackWhite', label: 'Black / white screen' },
 	{ id: 'pauseResume', label: 'Pause / resume' },
 	{ id: 'media', label: 'Media control' },
+	{ id: 'mediaDuration', label: 'Media length / time remaining' },
 	{ id: 'buildCount', label: 'Build count' },
 	{ id: 'buildPosition', label: 'Build position' },
 	{ id: 'notes', label: 'Notes' },
@@ -142,6 +143,22 @@ export default function UpdateFeedbacks(self) {
 				},
 			],
 			callback: (fb) => self.state.inShow && v().media_state === fb.options.state,
+		},
+		media_ending: {
+			type: 'boolean',
+			name: 'Media ending soon (PowerPoint)',
+			description: 'Time remaining in the current slide\'s video or audio is at or below a threshold',
+			defaultStyle: { bgcolor: RED, color: WHITE },
+			options: [
+				{ id: 'seconds', type: 'number', label: 'Seconds remaining', default: 10, min: 0, max: 86400, asInteger: true },
+				{ id: 'playing', type: 'checkbox', label: 'Only while playing', default: true },
+			],
+			callback: (fb) => {
+				const remaining = v().media_remaining
+				if (!self.state.inShow || remaining === '') return false
+				if (fb.options.playing && v().media_state !== 'playing') return false
+				return Number(remaining) <= Number(fb.options.seconds) * 1000
+			},
 		},
 		supports: {
 			type: 'boolean',
