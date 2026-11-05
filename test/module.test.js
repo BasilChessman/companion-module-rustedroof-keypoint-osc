@@ -86,6 +86,34 @@ test('commands: specific messages', () => {
 	assert.deepEqual(COMMANDS.select_app.build({ app: 'keynote' }), { address: '/keypoint/app/select', args: [s('keynote')] })
 })
 
+test('commands: PerfectCue bridge', () => {
+	const build = (o, state) => COMMANDS.perfectcue.build({ host: '', port: '', ...o }, state)
+	assert.deepEqual(build({ mode: 'enable' }), { address: '/keypoint/perfectcue/enable', args: [] })
+	assert.deepEqual(build({ mode: 'enable', host: ' perfectcue.local ', port: '5100' }).args, [s('perfectcue.local'), i(5100)])
+	assert.deepEqual(build({ mode: 'enable', port: '5101' }).args, [s(''), i(5101)]) // keeps the host
+	assert.equal(build({ mode: 'enable', port: 'abc' }), null)
+	assert.equal(build({ mode: 'enable', port: '70000' }), null)
+	assert.deepEqual(build({ mode: 'disable', host: 'x' }), { address: '/keypoint/perfectcue/disable', args: [] })
+	// Toggle follows KeyPoint's reported state.
+	const st = new KeyPointState()
+	assert.equal(build({ mode: 'toggle' }, st).address, '/keypoint/perfectcue/enable')
+	st.apply('/keypoint/perfectcue/enabled', [{ type: 'T', value: true }])
+	assert.equal(build({ mode: 'toggle' }, st).address, '/keypoint/perfectcue/disable')
+})
+
+test('state: PerfectCue bridge status', () => {
+	const st = new KeyPointState()
+	const T = { type: 'T', value: true }
+	const F = { type: 'F', value: false }
+	assert.deepEqual(st.apply('/keypoint/perfectcue/enabled', [T]), ['perfectcue_enabled'])
+	assert.deepEqual(st.apply('/keypoint/perfectcue/connected', [T]), ['perfectcue_connected'])
+	st.apply('/keypoint/slideshow/state', [s('edit')]) // not show-only: survives the show ending
+	assert.equal(st.values.perfectcue_connected, true)
+	st.apply('/keypoint/perfectcue/connected', [F])
+	assert.equal(st.values.perfectcue_connected, false)
+	assert.ok('perfectcue_enabled' in VARIABLES && 'perfectcue_connected' in VARIABLES)
+})
+
 test('state: show feedback becomes variables', () => {
 	const st = new KeyPointState()
 	assert.deepEqual(st.apply('/keypoint/slideshow/state', [s('running')]), ['show_state'])

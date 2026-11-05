@@ -25,6 +25,8 @@ export const VARIABLES = {
 	media_remaining: 'Media time remaining in ms (PowerPoint)',
 	media_remaining_display: 'Media time remaining (m:ss)',
 	files_enabled: 'File access enabled on the Mac (true/false)',
+	perfectcue_enabled: 'KeyPoint is set to listen to a PerfectCue bridge (true/false)',
+	perfectcue_connected: 'KeyPoint is connected to the PerfectCue bridge (true/false)',
 	active_folder: 'Active folder for file actions',
 	files: 'Presentations in the active folder (after "refresh file list")',
 	last_event: 'Last event from KeyPoint (e.g. slideshow_begin)',

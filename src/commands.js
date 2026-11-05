@@ -23,7 +23,7 @@ const textOption = (id, label, tooltip) => ({ id, type: 'textinput', label, defa
 
 const toggleArgs = (mode) => (mode === 'on' ? [int(1)] : mode === 'off' ? [int(0)] : [])
 
-/** id -> { name, description?, options, build(options) -> message | null } */
+/** id -> { name, description?, options, build(options, state?) -> message | null } */
 const COMMANDS = {
 	next: { name: 'Next (slide or build)', options: [], build: () => msg('next') },
 	previous: { name: 'Previous (slide or build)', options: [], build: () => msg('previous') },
@@ -240,6 +240,48 @@ const COMMANDS = {
 		build: (o) => msg(o.enabled === 'disable' ? 'actions/disable' : 'actions/enable'),
 	},
 	refresh: { name: 'KeyPoint: refresh feedback', options: [], build: () => msg('feedbacks/refresh') },
+	perfectcue: {
+		name: 'PerfectCue bridge: listen / stop (Keynote)',
+		description:
+			'KeyPoint listens to a PerfectCue bridge, so clicker presses time Keynote movies that start on a click or after a build.',
+		options: [
+			{
+				id: 'mode',
+				type: 'dropdown',
+				label: 'Action',
+				default: 'enable',
+				disableAutoExpression: true, // the host and port fields hide themselves based on it
+				choices: [
+					{ id: 'enable', label: 'Listen' },
+					{ id: 'disable', label: 'Stop listening' },
+					{ id: 'toggle', label: 'Toggle' },
+				],
+			},
+			{
+				...textOption('host', 'Bridge host (empty = keep current)', 'For example "perfectcue.local" or "192.168.0.169"'),
+				isVisibleExpression: `$(options:mode) != 'disable'`,
+			},
+			{
+				...textOption('port', 'Bridge port (empty = keep current)', 'The bridge\'s TCP port, 5100 by default'),
+				isVisibleExpression: `$(options:mode) != 'disable'`,
+			},
+		],
+		build: (o, state) => {
+			const listening = state?.values.perfectcue_enabled === true
+			if (o.mode === 'disable' || (o.mode === 'toggle' && listening)) return msg('perfectcue/disable')
+			const args = []
+			const host = String(o.host ?? '').trim()
+			const port = String(o.port ?? '').trim()
+			if (host) args.push({ type: 's', value: host })
+			if (port) {
+				const n = Number(port)
+				if (!Number.isInteger(n) || n < 1 || n > 65535) return null
+				if (!host) args.push({ type: 's', value: '' }) // keeps the current host
+				args.push(int(n))
+			}
+			return msg('perfectcue/enable', args)
+		},
+	},
 }
 
 export { COMMANDS, PREFIX }

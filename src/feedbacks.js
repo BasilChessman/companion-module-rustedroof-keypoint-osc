@@ -168,6 +168,31 @@ export default function UpdateFeedbacks(self) {
 			options: [{ id: 'capability', type: 'dropdown', label: 'Feature', default: 'media', choices: CAPABILITIES }],
 			callback: (fb) => self.state.supports(fb.options.capability),
 		},
+		perfectcue: {
+			type: 'boolean',
+			name: 'PerfectCue bridge',
+			description: 'Whether KeyPoint is listening to a PerfectCue bridge, and connected to it',
+			defaultStyle: { bgcolor: GREEN, color: WHITE },
+			options: [
+				{
+					id: 'state',
+					type: 'dropdown',
+					label: 'State',
+					default: 'connected',
+					choices: [
+						{ id: 'connected', label: 'Connected' },
+						{ id: 'enabled', label: 'Listening is on' },
+						{ id: 'not_connected', label: 'Listening is on, but not connected' },
+					],
+				},
+			],
+			callback: (fb) => {
+				const { perfectcue_enabled: on, perfectcue_connected: connected } = v()
+				if (fb.options.state === 'enabled') return on
+				if (fb.options.state === 'not_connected') return on && !connected
+				return on && connected
+			},
+		},
 		files_enabled: {
 			type: 'boolean',
 			name: 'File access is enabled on the Mac',
