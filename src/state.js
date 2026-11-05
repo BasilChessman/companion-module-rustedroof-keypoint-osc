@@ -55,6 +55,8 @@ function emptyValues() {
 		presentations: '',
 		files: '',
 		files_enabled: false,
+		perfectcue_enabled: false,
+		perfectcue_connected: false,
 		active_folder: '',
 		last_event: '',
 		version: '',
@@ -148,6 +150,12 @@ class KeyPointState {
 			}
 			case 'v2/files/enabled':
 				v.files_enabled = first?.value === true
+				break
+			case 'perfectcue/enabled':
+				v.perfectcue_enabled = first?.value === true
+				break
+			case 'perfectcue/connected':
+				v.perfectcue_connected = first?.value === true
 				break
 			case 'v2/files/activefolder':
 				v.active_folder = text ?? ''

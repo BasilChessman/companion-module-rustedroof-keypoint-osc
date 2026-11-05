@@ -8,7 +8,7 @@ export default function UpdateActions(self) {
 			description: command.description,
 			options: command.options,
 			callback: async (event) => {
-				const message = command.build(event.options)
+				const message = command.build(event.options, self.state)
 				if (message) {
 					self.send(message)
 				} else {

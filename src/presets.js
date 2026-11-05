@@ -100,6 +100,13 @@ export default function UpdatePresets(self) {
 			size: '14',
 			feedbacks: [unsupported('mediaDuration')],
 		}),
+		perfectcue: button('PerfectCue bridge: listen toggle', 'PERFECTCUE\\nOFF', 'perfectcue', { mode: 'toggle', host: '', port: '' }, {
+			size: '14',
+			feedbacks: [
+				{ feedbackId: 'perfectcue', options: { state: 'enabled' }, style: { bgcolor: 0xd08000, color: BLACK, text: 'PERFECTCUE\\nNO LINK' } },
+				{ feedbackId: 'perfectcue', options: { state: 'connected' }, style: { bgcolor: GREEN, color: WHITE, text: 'PERFECTCUE\\nON' } },
+			],
+		}),
 		app_auto: button('App: automatic', 'APP\\nAUTO', 'select_app', { app: 'auto' }, { size: '14' }),
 		app_powerpoint: button('App: PowerPoint', 'APP\\nPPT', 'select_app', { app: 'powerpoint' }, {
 			size: '14',
@@ -125,6 +132,7 @@ export default function UpdatePresets(self) {
 			definitions: ['media_playpause', 'media_stop', 'media_back', 'media_forward', 'media_time', 'media_countdown', 'media_last10'],
 		},
 		{ id: 'app', name: 'App selection', definitions: ['app_auto', 'app_powerpoint', 'app_keynote'] },
+		{ id: 'perfectcue', name: 'PerfectCue clicker (Keynote)', definitions: ['perfectcue'] },
 	]
 
 	self.setPresetDefinitions(structure, presets)
