@@ -44,7 +44,7 @@ Notes:
 
 ### Variables
 
-`$(keypoint:current_slide)`, `slide_count`, `slides_remaining`, `presentation_name`, `notes`, `section_name`, `build_position`, `build_count`, `media_position_display`, `media_remaining_display`, `media_duration_display`, `app`, `show_state`, `overlay`, `connected` and more. Replace `keypoint` with your connection's label. The full list is under Variables for this connection.
+`$(keypoint:current_slide)`, `slide_count`, `slides_remaining`, `presentation_name`, `notes`, `section_name`, `build_position`, `build_count`, `media_position_display`, `media_remaining_display`, `media_duration_display`, `app`, `show_state`, `overlay`, `connected` and more. Keynote has no sections, so in Keynote `section_slides_remaining` is the same as `slides_remaining` (the whole deck counts as one section). Replace `keypoint` with your connection's label. The full list is under Variables for this connection.
 
 ### Presets
 
@@ -81,4 +81,4 @@ If the show is advanced with a DSAN PerfectCue and a [PerfectCue bridge](https:/
 
 Only turn this on for the KeyPoint on the Mac that the PerfectCue base station's USB is plugged into: KeyPoint assumes every press reached its Keynote. The bridge accepts up to 4 connections, so the Dsan: PerfectCue module and KeyPoint can use it at the same time. If KeyPoint also listens for clicker keys and the base station's USB is on the same Mac, a press arrives both ways; KeyPoint counts it once.
 
-The clicker and estimate features need KeyPoint OSC 0.3.0 or later.
+The clicker and estimate features need KeyPoint OSC 0.3.0 or later; build counts for Keynote need 0.3.1.

@@ -15,7 +15,7 @@ export const VARIABLES = {
 	notes: 'Presenter notes of the current slide',
 	section_index: 'Current section number (PowerPoint)',
 	section_name: 'Current section name (PowerPoint)',
-	section_slides_remaining: 'Visible slides left in the section (PowerPoint)',
+	section_slides_remaining: 'Visible slides left in the section (Keynote: in the deck, as slides_remaining)',
 	overlay: 'Black/white screen (none, black, white)',
 	media_state: 'Media state (playing, paused, stopped, notready; Keynote: estimated)',
 	media_position: 'Media position in ms',
