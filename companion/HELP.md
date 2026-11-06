@@ -31,7 +31,7 @@ KeyPoint picks the app automatically: the one with a slide show running, otherwi
 | Media play / pause / stop / seek | ✅ | — |
 | Media length and time remaining | ✅ from the saved file | ⚠️ estimate only, see below |
 | Media state | ✅ | ⚠️ estimate only |
-| Build count and builds remaining | ✅ | — |
+| Build count and builds remaining | ✅ from the saved file | ✅ from the saved file |
 | Notes, slide counts, slides remaining | ✅ | ✅ |
 
 Use the **Current app supports** feedback to grey out buttons the current app can't do (the media and black/white presets already do this).
@@ -39,7 +39,7 @@ Use the **Current app supports** feedback to grey out buttons the current app ca
 Notes:
 
 - **Go to slide** in PowerPoint restarts the show at that slide, so the screen flickers briefly. That's a PowerPoint for Mac limitation.
-- **Build position** is counted from KeyPoint's own next/previous commands. Clicks made directly on the Mac aren't seen until the slide changes.
+- **Builds** are counted in clicks: an effect or build set to run with or after the previous one doesn't add to the count. The count comes from the saved file (save the deck after changing builds); in Keynote it's left out while the deck has unsaved changes. **Build position** is counted from KeyPoint's next/previous, plus clicker keys or PerfectCue presses if those are on. Other clicks on the Mac aren't seen until the slide changes, and a second press while a build is still animating can be counted when the app only finished the animation.
 - **File actions** (open, close, folder) only work after **Allow file open/close over OSC** is turned on in the KeyPoint menu on the Mac.
 
 ### Variables

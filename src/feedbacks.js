@@ -81,7 +81,7 @@ export default function UpdateFeedbacks(self) {
 		},
 		builds_remaining: {
 			type: 'boolean',
-			name: 'Current slide has builds remaining (PowerPoint)',
+			name: 'Current slide has builds remaining',
 			defaultStyle: { bgcolor: AMBER, color: BLACK },
 			options: [],
 			callback: () => self.state.inShow && Number(v().build_remaining) > 0,
