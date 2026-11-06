@@ -101,6 +101,30 @@ test('commands: PerfectCue bridge', () => {
 	assert.equal(build({ mode: 'toggle' }, st).address, '/keypoint/perfectcue/disable')
 })
 
+test('commands: clicker keys', () => {
+	assert.deepEqual(COMMANDS.keyboard_clicker.build({ mode: 'enable' }), { address: '/keypoint/keyboard/enable', args: [] })
+	assert.equal(COMMANDS.keyboard_clicker.build({ mode: 'disable' }).address, '/keypoint/keyboard/disable')
+	const st = new KeyPointState()
+	assert.equal(COMMANDS.keyboard_clicker.build({ mode: 'toggle' }, st).address, '/keypoint/keyboard/enable')
+	st.apply('/keypoint/keyboard/enabled', [{ type: 'T', value: true }])
+	assert.equal(COMMANDS.keyboard_clicker.build({ mode: 'toggle' }, st).address, '/keypoint/keyboard/disable')
+})
+
+test('state: clicker keys status and estimated media', () => {
+	const st = new KeyPointState()
+	const T = { type: 'T', value: true }
+	assert.deepEqual(st.apply('/keypoint/keyboard/enabled', [T]), ['keyboard_enabled'])
+	assert.deepEqual(st.apply('/keypoint/keyboard/permission', [T]), ['keyboard_permission'])
+	st.apply('/keypoint/slideshow/state', [s('running')])
+	st.apply('/keypoint/slideshow/media/state', [s('playing')])
+	assert.deepEqual(st.apply('/keypoint/slideshow/media/estimated', [T]), ['media_estimated'])
+	assert.equal(st.values.media_estimated, true)
+	st.apply('/keypoint/slideshow/media/state', [s('')]) // no media: cleared with the rest
+	assert.equal(st.values.media_estimated, '')
+	st.apply('/keypoint/slideshow/state', [s('edit')])
+	assert.equal(st.values.keyboard_enabled, true) // not show-only
+})
+
 test('state: PerfectCue bridge status', () => {
 	const st = new KeyPointState()
 	const T = { type: 'T', value: true }

@@ -22,6 +22,7 @@ const SHOW_KEYS = [
 	'media_duration_display',
 	'media_remaining',
 	'media_remaining_display',
+	'media_estimated',
 	'overlay',
 ]
 
@@ -51,12 +52,15 @@ function emptyValues() {
 		media_duration_display: '',
 		media_remaining: '',
 		media_remaining_display: '',
+		media_estimated: '',
 		overlay: 'none',
 		presentations: '',
 		files: '',
 		files_enabled: false,
 		perfectcue_enabled: false,
 		perfectcue_connected: false,
+		keyboard_enabled: false,
+		keyboard_permission: false,
 		active_folder: '',
 		last_event: '',
 		version: '',
@@ -150,6 +154,15 @@ class KeyPointState {
 			}
 			case 'v2/files/enabled':
 				v.files_enabled = first?.value === true
+				break
+			case 'keyboard/enabled':
+				v.keyboard_enabled = first?.value === true
+				break
+			case 'keyboard/permission':
+				v.keyboard_permission = first?.value === true
+				break
+			case 'slideshow/media/estimated':
+				v.media_estimated = first?.value === true
 				break
 			case 'perfectcue/enabled':
 				v.perfectcue_enabled = first?.value === true
