@@ -118,6 +118,8 @@ class KeyPointState {
 				const next = new Set(Array.isArray(list) ? list : [])
 				capsChanged = next.size !== this.capabilities.size || [...next].some((c) => !this.capabilities.has(c))
 				this.capabilities = next
+				// Keynote has no sections: the whole deck counts as one (see slideshow/slidesremaining).
+				if (capsChanged) v.section_slides_remaining = this.supports('sections') ? '' : v.slides_remaining
 				break
 			}
 			case 'presentation/name':
@@ -189,6 +191,7 @@ class KeyPointState {
 				break
 			case 'slideshow/slidesremaining':
 				v.slides_remaining = num ?? ''
+				if (!this.supports('sections')) v.section_slides_remaining = v.slides_remaining
 				break
 			case 'slideshow/builds/position':
 				v.build_position = num ?? ''

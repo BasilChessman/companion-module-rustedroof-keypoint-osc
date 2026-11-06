@@ -200,6 +200,23 @@ test('state: JSON lists, capabilities and foreign prefixes', () => {
 	assert.deepEqual(st.apply('/keypoint/v2/presentations', [s('not json')]), ['presentations'])
 })
 
+test('state: without sections (Keynote) the section count is the deck count', () => {
+	const st = new KeyPointState()
+	st.apply('/keypoint/capabilities', [s('["navigate"]')])
+	st.apply('/keypoint/slideshow/slidesremaining', [i(7)])
+	assert.equal(st.values.section_slides_remaining, 7)
+	// Switching to PowerPoint: its own section values take over.
+	st.apply('/keypoint/capabilities', [s('["navigate","sections"]')])
+	assert.equal(st.values.section_slides_remaining, '')
+	st.apply('/keypoint/slideshow/slidesremaining', [i(5)])
+	assert.equal(st.values.section_slides_remaining, '')
+	st.apply('/keypoint/slideshow/section/slidesremaining', [i(2)])
+	assert.equal(st.values.section_slides_remaining, 2)
+	// And back to Keynote.
+	st.apply('/keypoint/capabilities', [s('["navigate"]')])
+	assert.equal(st.values.section_slides_remaining, 5)
+})
+
 test('state: every value has a variable definition', () => {
 	const st = new KeyPointState()
 	for (const key of Object.keys(st.values)) assert.ok(key in VARIABLES, `${key} has no variable definition`)
