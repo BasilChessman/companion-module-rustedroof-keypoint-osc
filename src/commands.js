@@ -240,6 +240,28 @@ const COMMANDS = {
 		build: (o) => msg(o.enabled === 'disable' ? 'actions/disable' : 'actions/enable'),
 	},
 	refresh: { name: 'KeyPoint: refresh feedback', options: [], build: () => msg('feedbacks/refresh') },
+	keyboard_clicker: {
+		name: 'Clicker keys: listen / stop (Keynote)',
+		description:
+			'KeyPoint watches the Mac for clicker keys, so presses time Keynote movies that start on a click or after a build. Needs Input Monitoring on the Mac; keys are learned in the KeyPoint menu.',
+		options: [
+			{
+				id: 'mode',
+				type: 'dropdown',
+				label: 'Action',
+				default: 'enable',
+				choices: [
+					{ id: 'enable', label: 'Listen' },
+					{ id: 'disable', label: 'Stop listening' },
+					{ id: 'toggle', label: 'Toggle' },
+				],
+			},
+		],
+		build: (o, state) => {
+			const listening = state?.values.keyboard_enabled === true
+			return msg(o.mode === 'disable' || (o.mode === 'toggle' && listening) ? 'keyboard/disable' : 'keyboard/enable')
+		},
+	},
 	perfectcue: {
 		name: 'PerfectCue bridge: listen / stop (Keynote)',
 		description:

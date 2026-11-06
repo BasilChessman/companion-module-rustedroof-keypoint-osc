@@ -15,6 +15,7 @@ export const CAPABILITIES = [
 	{ id: 'pauseResume', label: 'Pause / resume' },
 	{ id: 'media', label: 'Media control' },
 	{ id: 'mediaDuration', label: 'Media length / time remaining' },
+	{ id: 'mediaEstimated', label: 'Media time estimated (Keynote)' },
 	{ id: 'buildCount', label: 'Build count' },
 	{ id: 'buildPosition', label: 'Build position' },
 	{ id: 'notes', label: 'Notes' },
@@ -127,7 +128,8 @@ export default function UpdateFeedbacks(self) {
 		},
 		media_state: {
 			type: 'boolean',
-			name: 'Media state (PowerPoint)',
+			name: 'Media state',
+			description: 'In Keynote this is KeyPoint\'s estimate',
 			defaultStyle: { bgcolor: GREEN, color: WHITE },
 			options: [
 				{
@@ -146,8 +148,8 @@ export default function UpdateFeedbacks(self) {
 		},
 		media_ending: {
 			type: 'boolean',
-			name: 'Media ending soon (PowerPoint)',
-			description: 'Time remaining in the current slide\'s video or audio is at or below a threshold',
+			name: 'Media time remaining at or below (ending soon)',
+			description: 'Time remaining in the current slide\'s video or audio is at or below a threshold. In Keynote the time is an estimate.',
 			defaultStyle: { bgcolor: RED, color: WHITE },
 			options: [
 				{ id: 'seconds', type: 'number', label: 'Seconds remaining', default: 10, min: 0, max: 86400, asInteger: true },
@@ -158,6 +160,39 @@ export default function UpdateFeedbacks(self) {
 				if (!self.state.inShow || remaining === '') return false
 				if (fb.options.playing && v().media_state !== 'playing') return false
 				return Number(remaining) <= Number(fb.options.seconds) * 1000
+			},
+		},
+		media_estimated: {
+			type: 'boolean',
+			name: 'Media time is an estimate (Keynote)',
+			description: 'The media values are KeyPoint\'s estimate rather than read from the app. Use it to mark a countdown as approximate.',
+			defaultStyle: { bgcolor: AMBER, color: BLACK },
+			options: [],
+			callback: () => self.state.inShow && v().media_estimated === true,
+		},
+		keyboard_clicker: {
+			type: 'boolean',
+			name: 'Clicker keys',
+			description: 'Whether KeyPoint is listening for clicker keys on the Mac, and has the permission it needs',
+			defaultStyle: { bgcolor: GREEN, color: WHITE },
+			options: [
+				{
+					id: 'state',
+					type: 'dropdown',
+					label: 'State',
+					default: 'listening',
+					choices: [
+						{ id: 'listening', label: 'Listening (permission granted)' },
+						{ id: 'enabled', label: 'Listening is on' },
+						{ id: 'no_permission', label: 'Listening is on, but Input Monitoring is missing' },
+					],
+				},
+			],
+			callback: (fb) => {
+				const { keyboard_enabled: on, keyboard_permission: ok } = v()
+				if (fb.options.state === 'enabled') return on
+				if (fb.options.state === 'no_permission') return on && !ok
+				return on && ok
 			},
 		},
 		supports: {

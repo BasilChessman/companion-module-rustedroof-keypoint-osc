@@ -92,6 +92,7 @@ export default function UpdatePresets(self) {
 		media_countdown: display('Media time remaining', `LEFT\\n${v('media_remaining_display')}`, {
 			size: '18',
 			feedbacks: [
+				{ feedbackId: 'media_estimated', options: {}, style: { text: `≈ LEFT\\n${v('media_remaining_display')}` } },
 				{ feedbackId: 'media_ending', options: { seconds: 30, playing: true }, style: { bgcolor: 0xd08000, color: BLACK } },
 				{ feedbackId: 'media_ending', options: { seconds: 10, playing: true }, style: { bgcolor: RED, color: WHITE } },
 			],
@@ -99,6 +100,13 @@ export default function UpdatePresets(self) {
 		media_last10: button('Media: last 10 s', 'LAST\\n10s', 'media_seek', { mode: 'beforeend', ms: 10000 }, {
 			size: '14',
 			feedbacks: [unsupported('mediaDuration')],
+		}),
+		keyboard_clicker: button('Clicker keys: listen toggle', 'CLICKER\\nKEYS OFF', 'keyboard_clicker', { mode: 'toggle' }, {
+			size: '14',
+			feedbacks: [
+				{ feedbackId: 'keyboard_clicker', options: { state: 'enabled' }, style: { bgcolor: 0xd08000, color: BLACK, text: 'CLICKER\\nNO PERMISSION' } },
+				{ feedbackId: 'keyboard_clicker', options: { state: 'listening' }, style: { bgcolor: GREEN, color: WHITE, text: 'CLICKER\\nKEYS ON' } },
+			],
 		}),
 		perfectcue: button('PerfectCue bridge: listen toggle', 'PERFECTCUE\\nOFF', 'perfectcue', { mode: 'toggle', host: '', port: '' }, {
 			size: '14',
@@ -128,11 +136,11 @@ export default function UpdatePresets(self) {
 		},
 		{
 			id: 'media',
-			name: 'Media (PowerPoint)',
+			name: 'Media',
 			definitions: ['media_playpause', 'media_stop', 'media_back', 'media_forward', 'media_time', 'media_countdown', 'media_last10'],
 		},
 		{ id: 'app', name: 'App selection', definitions: ['app_auto', 'app_powerpoint', 'app_keynote'] },
-		{ id: 'perfectcue', name: 'PerfectCue clicker (Keynote)', definitions: ['perfectcue'] },
+		{ id: 'clicker', name: 'Clicker (Keynote timing)', definitions: ['keyboard_clicker', 'perfectcue'] },
 	]
 
 	self.setPresetDefinitions(structure, presets)

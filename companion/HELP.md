@@ -30,6 +30,7 @@ KeyPoint picks the app automatically: the one with a slide show running, otherwi
 | Pause / resume auto-advance | ✅ | — |
 | Media play / pause / stop / seek | ✅ | — |
 | Media length and time remaining | ✅ from the saved file | ⚠️ estimate only, see below |
+| Media state | ✅ | ⚠️ estimate only |
 | Build count and builds remaining | ✅ | — |
 | Notes, slide counts, slides remaining | ✅ | ✅ |
 
@@ -47,7 +48,7 @@ Notes:
 
 ### Presets
 
-Ready-made buttons for navigation, show control, black/white, info displays (slide counter, builds, notes, section), media (including a countdown that turns amber at 30 s and red at 10 s), app selection, and a PerfectCue bridge on/off button.
+Ready-made buttons for navigation, show control, black/white, info displays (slide counter, builds, notes, section), media (including a countdown that turns amber at 30 s and red at 10 s), app selection, and clicker on/off buttons (clicker keys, PerfectCue bridge). The media countdown shows **≈ LEFT** when the time is an estimate.
 
 ## Media countdown (PowerPoint)
 
@@ -55,7 +56,20 @@ PowerPoint doesn't report a video's length, so KeyPoint reads it from the saved 
 
 ## Media countdown (Keynote): an estimate
 
-Keynote doesn't report whether a movie is playing or how far it has got, so **the Keynote values are KeyPoint's estimate, not a live reading**. KeyPoint reads the saved deck for when the movie starts (when the slide appears, on a click, or after or with another build, plus delays) and for its trims, then counts down from that moment. Pausing or skimming the movie on the Mac isn't seen. A movie that starts on a click waits (`notready`) until the click: one sent through KeyPoint (**Next**), or a PerfectCue press (see below). Clicks with a keyboard, mouse or other clicker on the Mac aren't seen. Save the deck before the show. See the KeyPoint OSC README for the full list of cases.
+Keynote doesn't report whether a movie is playing or how far it has got, so **the Keynote values are KeyPoint's estimate, not a live reading**. KeyPoint reads the saved deck for when the movie starts (when the slide appears, on a click, or after or with another build, plus delays) and for its trims, then counts down from that moment. Pausing or skimming the movie on the Mac isn't seen. A movie that starts on a click waits (`notready`) until the click: one sent through KeyPoint (**Next**), a clicker key on the Mac, or a PerfectCue press (see below). Mouse clicks on the Mac aren't seen. Save the deck before the show. See the KeyPoint OSC README for the full list of cases.
+
+- **Media time is an estimate (Keynote)** feedback, and the `media_estimated` variable, tell you when the values are estimated, for example to show "≈" on a countdown.
+- **Media time remaining at or below (ending soon)** colours a button when the time left drops to a number of seconds, in both apps.
+
+## Clicker keys (Keynote)
+
+Most clickers plug into the Mac and send keys (Page Down, → and so on). KeyPoint can watch for those keys so the press times Keynote movies that start on a click or after a build.
+
+- **Clicker keys: listen / stop** action: *Listen*, *Stop listening* or *Toggle*.
+- **Clicker keys** feedback: *Listening (permission granted)*, *Listening is on*, or *Listening is on, but Input Monitoring is missing*. The preset button is amber until the permission is granted and green once KeyPoint is listening.
+- Variables: `keyboard_enabled`, `keyboard_permission`.
+
+KeyPoint needs **Input Monitoring** on the Mac (System Settings > Privacy & Security > Input Monitoring); click **Allow…** in the KeyPoint menu. It only listens: keys aren't blocked, changed or stored, and only clicker keys going to Keynote during a show count. The default keys are the ones Keynote uses; if your clicker sends something else, use **Learn** in the KeyPoint menu on the Mac.
 
 ## PerfectCue clicker (Keynote)
 
@@ -65,4 +79,6 @@ If the show is advanced with a DSAN PerfectCue and a [PerfectCue bridge](https:/
 - **PerfectCue bridge** feedback: *Connected*, *Listening is on*, or *Listening is on, but not connected*. The preset button is amber while KeyPoint can't reach the bridge and green once connected.
 - Variables: `perfectcue_enabled`, `perfectcue_connected`.
 
-Only turn this on for the KeyPoint on the Mac that the PerfectCue base station's USB is plugged into: KeyPoint assumes every press reached its Keynote. The bridge accepts up to 4 connections, so the Dsan: PerfectCue module and KeyPoint can use it at the same time. Needs KeyPoint OSC with PerfectCue support (the `keynote-media-estimate` branch or later).
+Only turn this on for the KeyPoint on the Mac that the PerfectCue base station's USB is plugged into: KeyPoint assumes every press reached its Keynote. The bridge accepts up to 4 connections, so the Dsan: PerfectCue module and KeyPoint can use it at the same time. If KeyPoint also listens for clicker keys and the base station's USB is on the same Mac, a press arrives both ways; KeyPoint counts it once.
+
+The clicker and estimate features need KeyPoint OSC 0.3.0 or later.
