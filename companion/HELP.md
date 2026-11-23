@@ -34,7 +34,7 @@ KeyPoint picks the app automatically: the one with a slide show running, otherwi
 | Build count and builds remaining | ✅ from the saved file | ✅ from the saved file |
 | Notes, slide counts, slides remaining | ✅ | ✅ |
 
-Use the **Current app supports** feedback to grey out buttons the current app can't do (the media and black/white presets already do this).
+Use the **Current app supports** feedback to gray out buttons the current app can't do (the media and black/white presets already do this).
 
 Notes:
 
@@ -52,14 +52,14 @@ Ready-made buttons for navigation, show control, black/white, info displays (sli
 
 ## Media countdown (PowerPoint)
 
-PowerPoint doesn't report a video's length, so KeyPoint reads it from the saved presentation file. Trims made in PowerPoint are taken into account. Save the deck after adding or trimming a video; changes that aren't saved yet aren't seen. Online videos have no length. Use the **Media ending soon** feedback to colour a button when a set number of seconds is left.
+PowerPoint doesn't report a video's length, so KeyPoint reads it from the saved presentation file. Trims made in PowerPoint are taken into account. Save the deck after adding or trimming a video; changes that aren't saved yet aren't seen. Online videos have no length. Use the **Media ending soon** feedback to color a button when a set number of seconds is left.
 
 ## Media countdown (Keynote): an estimate
 
 Keynote doesn't report whether a movie is playing or how far it has got, so **the Keynote values are KeyPoint's estimate, not a live reading**. KeyPoint reads the saved deck for when the movie starts (when the slide appears, on a click, or after or with another build, plus delays) and for its trims, then counts down from that moment. Pausing or skimming the movie on the Mac isn't seen. A movie that starts on a click waits (`notready`) until the click: one sent through KeyPoint (**Next**), a clicker key on the Mac, or a PerfectCue press (see below). Mouse clicks on the Mac aren't seen. Save the deck before the show. See the KeyPoint OSC README for the full list of cases.
 
 - **Media time is an estimate (Keynote)** feedback, and the `media_estimated` variable, tell you when the values are estimated, for example to show "≈" on a countdown.
-- **Media time remaining at or below (ending soon)** colours a button when the time left drops to a number of seconds, in both apps.
+- **Media time remaining at or below (ending soon)** colors a button when the time left drops to a number of seconds, in both apps.
 
 ## Clicker keys (Keynote)
 
