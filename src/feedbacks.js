@@ -198,7 +198,7 @@ export default function UpdateFeedbacks(self) {
 		supports: {
 			type: 'boolean',
 			name: 'Current app supports',
-			description: 'For example, grey out media buttons when Keynote is in use',
+			description: 'For example, gray out media buttons when Keynote is in use',
 			defaultStyle: { bgcolor: GREEN, color: WHITE },
 			options: [{ id: 'capability', type: 'dropdown', label: 'Feature', default: 'media', choices: CAPABILITIES }],
 			callback: (fb) => self.state.supports(fb.options.capability),
